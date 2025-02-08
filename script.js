@@ -24,11 +24,12 @@ document.addEventListener("DOMContentLoaded", () => {
                         flex-direction: column;
                         align-items: center;
                         background: var(--card-bg, #ffffff);
-                        padding: 15px;
-                        border-radius: 10px;
-                        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+                        padding: 10px;
+                        border-radius: 8px;
+                        box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.15);
                         text-align: center;
                         width: 100%;
+                        max-width: 180px;
                         transition: transform 0.3s ease-in-out;
                         border: 1px solid var(--border-color, #ddd);
                     }
@@ -44,12 +45,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
 
                     h3 {
-                        font-size: 1.1em;
+                        font-size: 1em;
                         margin: 10px 0;
                     }
 
                     p {
-                        font-size: 0.9em;
+                        font-size: 0.8em;
                         color: var(--subtext-color, #666);
                         margin: 5px 0;
                     }
@@ -58,15 +59,21 @@ document.addEventListener("DOMContentLoaded", () => {
                         background: #ff7e5f;
                         color: white;
                         border: none;
-                        padding: 10px;
+                        padding: 8px;
                         border-radius: 5px;
                         cursor: pointer;
                         transition: background 0.3s;
                         width: 100%;
+                        font-size: 0.9em;
                     }
 
                     button:hover {
                         background: #feb47b;
+                    }
+
+                    .added {
+                        background: #28a745 !important;
+                        pointer-events: none;
                     }
                 </style>
 
@@ -85,6 +92,23 @@ document.addEventListener("DOMContentLoaded", () => {
             this.shadowRoot.getElementById("book-author").textContent = `Зохиолч: ${this.getAttribute("author")}`;
             this.shadowRoot.getElementById("book-year").textContent = `Нийтлэгдсэн он: ${this.getAttribute("year")}`;
             this.shadowRoot.getElementById("book-isbn").textContent = `ISBN: ${this.getAttribute("isbn")}`;
+
+            const addToCartBtn = this.shadowRoot.getElementById("add-to-cart");
+
+            addToCartBtn.addEventListener("click", () => {
+                let cart = JSON.parse(localStorage.getItem("cart")) || [];
+                cart.push({
+                    id: this.getAttribute("id"),
+                    title: this.getAttribute("title"),
+                    author: this.getAttribute("author"),
+                    year: this.getAttribute("year"),
+                    isbn: this.getAttribute("isbn"),
+                });
+
+                localStorage.setItem("cart", JSON.stringify(cart));
+                addToCartBtn.textContent = "✅ Сагсанд нэмэгдсэн";
+                addToCartBtn.classList.add("added");
+            });
         }
     }
 
@@ -99,6 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             data.docs.forEach(book => {
                 const bookElement = document.createElement("book-card");
+                bookElement.setAttribute("id", book.key);
                 bookElement.setAttribute("cover", `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`);
                 bookElement.setAttribute("title", book.title);
                 bookElement.setAttribute("author", book.author_name ? book.author_name.join(", ") : "Тодорхойгүй");
