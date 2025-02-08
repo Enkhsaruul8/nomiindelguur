@@ -57,58 +57,40 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // ✅ Web Component - Номын карт
-    class BookCard extends HTMLElement {
-        constructor() {
-            super();
-            this.attachShadow({ mode: "open" });
+    // ✅ Номын мэдээллийг авах
+    fetch("https://openlibrary.org/search.json?q=programming&limit=9")
+        .then(response => response.json())
+        .then(data => {
+            const productList = document.getElementById("product-list");
+            productList.innerHTML = "";
 
-            this.shadowRoot.innerHTML = `
-                <style>
-                    :host {
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        background: white;
-                        padding: 15px;
-                        border-radius: 10px;
-                        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
-                        text-align: center;
-                        max-width: 250px;
-                    }
-                    img { max-width: 100%; height: auto; border-radius: 8px; }
-                    button { background: #ff7e5f; color: white; padding: 10px; border-radius: 5px; cursor: pointer; }
-                    button:hover { background: #feb47b; }
-                </style>
-
-                <img id="book-image" src="" alt="Book Cover">
-                <h3 id="book-title"></h3>
-                <p id="book-author"></p>
-                <button id="add-to-cart">🛒 Сагсанд нэмэх</button>
-            `;
-        }
-
-        connectedCallback() {
-            const addToCartBtn = this.shadowRoot.getElementById("add-to-cart");
-
-            addToCartBtn.addEventListener("click", () => {
-                let cart = JSON.parse(localStorage.getItem("cart")) || [];
-                const bookId = this.getAttribute("id");
-
-                if (!cart.some(item => item.id === bookId)) {
-                    cart.push({
-                        id: bookId,
-                        title: this.getAttribute("title"),
-                        author: this.getAttribute("author"),
-                    });
-
-                    localStorage.setItem("cart", JSON.stringify(cart));
-                }
-
-                addToCartBtn.textContent = "✅ Сагсанд нэмэгдсэн";
+            data.docs.forEach(book => {
+                const bookCard = document.createElement("div");
+                bookCard.classList.add("book-card");
+                bookCard.innerHTML = `
+                    <img src="https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg" alt="${book.title}">
+                    <h3>${book.title}</h3>
+                    <p>Зохиолч: ${book.author_name ? book.author_name.join(", ") : "Тодорхойгүй"}</p>
+                    <button class="add-to-cart" data-id="${book.key}" data-title="${book.title}">🛒 Сагсанд нэмэх</button>
+                `;
+                productList.appendChild(bookCard);
             });
-        }
-    }
 
-    customElements.define("book-card", BookCard);
+            document.querySelectorAll(".add-to-cart").forEach(button => {
+                button.addEventListener("click", (e) => {
+                    const bookId = e.target.getAttribute("data-id");
+                    const bookTitle = e.target.getAttribute("data-title");
+                    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+                    if (!cart.some(item => item.id === bookId)) {
+                        cart.push({ id: bookId, title: bookTitle });
+                        localStorage.setItem("cart", JSON.stringify(cart));
+                    }
+
+                    e.target.textContent = "✅ Сагсанд нэмэгдсэн";
+                    updateCartUI();
+                });
+            });
+        })
+        .catch(error => console.error("⚠️ Алдаа:", error));
 });
