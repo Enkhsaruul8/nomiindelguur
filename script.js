@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const darkModeToggle = document.getElementById("darkModeToggle");
 
-    // Dark Mode хадгалах, унших
+    // ✅ Dark Mode хадгалах, унших
     if (localStorage.getItem("dark-mode") === "true") {
         document.body.classList.add("dark-mode");
     }
@@ -10,6 +10,14 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.classList.toggle("dark-mode");
         localStorage.setItem("dark-mode", document.body.classList.contains("dark-mode"));
     });
+
+    // ✅ Номыг сагсанд нэмэх функц
+    const addToCart = (book) => {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        cart.push(book);
+        localStorage.setItem("cart", JSON.stringify(cart));
+        alert(`${book.title} сагсанд нэмэгдлээ!`);
+    };
 
     // 📌 **BookComponent - Номыг component байдлаар үүсгэх**
     class BookComponent {
@@ -36,23 +44,27 @@ document.addEventListener("DOMContentLoaded", () => {
             const bookYear = document.createElement("p");
             bookYear.textContent = `Нийтлэгдсэн он: ${this.book.first_publish_year || "Тодорхойгүй"}`;
 
-            const bookPages = document.createElement("p");
-            bookPages.textContent = `Хуудасны тоо: ${this.book.number_of_pages_median || "Тодорхойгүй"}`;
-
             const bookISBN = document.createElement("p");
             bookISBN.textContent = `ISBN: ${this.book.isbn ? this.book.isbn[0] : "Тодорхойгүй"}`;
 
             const addToCartBtn = document.createElement("button");
-            addToCartBtn.textContent = "Сагсанд нэмэх";
+            addToCartBtn.textContent = "🛒 Сагсанд нэмэх";
             addToCartBtn.classList.add("add-to-cart");
-            addToCartBtn.dataset.id = this.book.key;
-            addToCartBtn.dataset.title = this.book.title;
+
+            addToCartBtn.addEventListener("click", () => {
+                addToCart({
+                    id: this.book.key,
+                    title: this.book.title,
+                    author: this.book.author_name ? this.book.author_name.join(", ") : "Тодорхойгүй",
+                    year: this.book.first_publish_year || "Тодорхойгүй",
+                    isbn: this.book.isbn ? this.book.isbn[0] : "Тодорхойгүй"
+                });
+            });
 
             bookItem.appendChild(bookImage);
             bookItem.appendChild(bookTitle);
             bookItem.appendChild(bookAuthor);
             bookItem.appendChild(bookYear);
-            bookItem.appendChild(bookPages);
             bookItem.appendChild(bookISBN);
             bookItem.appendChild(addToCartBtn);
 
@@ -60,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // 📌 **Open Library API-с номын мэдээлэл татах**
+    // ✅ Open Library API-с номын мэдээлэл татах
     if (document.getElementById("product-list")) {
         fetch("https://openlibrary.org/search.json?q=programming&limit=10")
             .then((response) => response.json())
@@ -81,21 +93,27 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch((error) => console.error("Error fetching books:", error));
     }
 
-    // 📌 **Сагсны өгөгдөл хадгалах**
-    let cart = [];
-    try {
-        cart = JSON.parse(localStorage.getItem("cart")) || [];
-    } catch (error) {
-        console.error("Error parsing cart data:", error);
-    }
-
+    // ✅ Сагсны мэдээллийг cart.html хуудсан дээр харуулах
     const updateCartUI = () => {
         const cartItems = document.getElementById("cart-items");
         if (cartItems) {
             cartItems.innerHTML = "";
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = "<p>📭 Таны сагс хоосон байна.</p>";
+                return;
+            }
+
             cart.forEach((item) => {
                 const cartItem = document.createElement("div");
-                cartItem.innerHTML = `<p>${item.title} сагсанд нэмэгдсэн.</p>`;
+                cartItem.classList.add("cart-item");
+                cartItem.innerHTML = `
+                    <h3>${item.title}</h3>
+                    <p>Зохиолч: ${item.author}</p>
+                    <p>Нийтлэгдсэн он: ${item.year}</p>
+                    <p>ISBN: ${item.isbn}</p>
+                `;
                 cartItems.appendChild(cartItem);
             });
         }
@@ -103,15 +121,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     updateCartUI();
 
-    document.body.addEventListener("click", (event) => {
-        if (event.target.classList.contains("add-to-cart")) {
-            const productId = event.target.getAttribute("data-id");
-            const productTitle = event.target.getAttribute("data-title");
-
-            cart.push({ id: productId, title: productTitle });
-            localStorage.setItem("cart", JSON.stringify(cart));
-
+    // ✅ "Сагсыг хоослох" товчийг идэвхжүүлэх
+    const clearCartBtn = document.getElementById("clear-cart");
+    if (clearCartBtn) {
+        clearCartBtn.addEventListener("click", () => {
+            localStorage.removeItem("cart");
             updateCartUI();
-        }
-    });
+            alert("Сагс хоосорлоо! 🗑️");
+        });
+    }
 });
