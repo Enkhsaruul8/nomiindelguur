@@ -22,47 +22,12 @@ header {
     position: relative;
 }
 
-nav ul {
-    list-style: none;
-    padding: 0;
-}
-
-nav ul li {
-    display: inline;
-    margin: 0 15px;
-}
-
-nav ul li a {
-    text-decoration: none;
-    color: white;
-    font-weight: bold;
-}
-
-/* ✅ Dark Mode Товч */
-#darkModeToggle {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    padding: 10px;
-    background: #444;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-}
-
-body.dark-mode #darkModeToggle {
-    background: #fff;
-    color: #000;
-}
-
 /* ✅ Бүтээгдэхүүний жагсаалт (3 баганатай Grid Layout) */
 .grid-layout {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
     padding: 20px;
-    justify-content: center;
 }
 
 /* ✅ Responsive дизайн */
@@ -78,11 +43,8 @@ body.dark-mode #darkModeToggle {
     }
 }
 
-/* ✅ Web Component карт */
-book-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+/* ✅ Бүтээгдэхүүний карт */
+.book-card {
     background: white;
     padding: 15px;
     border-radius: 10px;
@@ -93,7 +55,7 @@ book-card {
     max-width: 250px;
 }
 
-book-card:hover {
+.book-card:hover {
     transform: translateY(-5px);
     box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
 }
@@ -103,7 +65,7 @@ body.dark-mode .grid-layout {
     background: #222;
 }
 
-body.dark-mode book-card {
+body.dark-mode .book-card {
     background: #2c2c2c;
     color: #fff;
     border: 1px solid #444;
