@@ -35,6 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
             cartItems.appendChild(cartItem);
         });
 
+        // ✅ Сагснаас хасах товч ажиллуулах
         document.querySelectorAll(".remove-from-cart").forEach(button => {
             button.addEventListener("click", (e) => {
                 const itemId = e.target.getAttribute("data-id");
@@ -48,6 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     updateCartUI();
 
+    // ✅ Сагсыг хоослох товчийг ажиллуулах
     const clearCartBtn = document.getElementById("clear-cart");
     if (clearCartBtn) {
         clearCartBtn.addEventListener("click", () => {
@@ -56,6 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // ✅ Web Component - Номын карт
     class BookCard extends HTMLElement {
         constructor() {
             super();
@@ -72,16 +75,59 @@ document.addEventListener("DOMContentLoaded", () => {
                         border-radius: 10px;
                         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
                         text-align: center;
-                        max-width: 250px;
+                        max-width: 220px;
+                        transition: transform 0.3s ease-in-out;
+                        border: 1px solid #ddd;
                     }
-                    img { max-width: 100%; height: auto; border-radius: 8px; }
-                    button { background: #ff7e5f; color: white; padding: 10px; border-radius: 5px; cursor: pointer; }
-                    button:hover { background: #feb47b; }
+
+                    :host(:hover) {
+                        transform: scale(1.05);
+                    }
+
+                    img {
+                        max-width: 100%;
+                        height: auto;
+                        border-radius: 8px;
+                    }
+
+                    h3 {
+                        font-size: 1.1em;
+                        margin: 10px 0;
+                    }
+
+                    p {
+                        font-size: 0.9em;
+                        color: #666;
+                        margin: 5px 0;
+                    }
+
+                    button {
+                        background: #ff7e5f;
+                        color: white;
+                        border: none;
+                        padding: 10px;
+                        border-radius: 5px;
+                        cursor: pointer;
+                        transition: background 0.3s;
+                        width: 100%;
+                        font-size: 0.9em;
+                    }
+
+                    button:hover {
+                        background: #feb47b;
+                    }
+
+                    .added {
+                        background: #28a745 !important;
+                        pointer-events: none;
+                    }
                 </style>
 
-                <img id="book-image" src="" alt="Book Cover">
+                <img id="book-image" src="" alt="Book Cover" loading="lazy">
                 <h3 id="book-title"></h3>
                 <p id="book-author"></p>
+                <p id="book-year"></p>
+                <p id="book-isbn"></p>
                 <button id="add-to-cart">🛒 Сагсанд нэмэх</button>
             `;
         }
@@ -93,20 +139,45 @@ document.addEventListener("DOMContentLoaded", () => {
                 let cart = JSON.parse(localStorage.getItem("cart")) || [];
                 const bookId = this.getAttribute("id");
 
+                // ✅ Сагсанд байгаа эсэхийг шалгах
                 if (!cart.some(item => item.id === bookId)) {
                     cart.push({
                         id: bookId,
                         title: this.getAttribute("title"),
                         author: this.getAttribute("author"),
+                        year: this.getAttribute("year"),
+                        isbn: this.getAttribute("isbn"),
                     });
 
                     localStorage.setItem("cart", JSON.stringify(cart));
+                    updateCartUI();
                 }
 
                 addToCartBtn.textContent = "✅ Сагсанд нэмэгдсэн";
+                addToCartBtn.classList.add("added");
             });
         }
     }
 
     customElements.define("book-card", BookCard);
+
+    // ✅ Open Library API-с ном татах
+    fetch("https://openlibrary.org/search.json?q=programming&limit=9")
+        .then(response => response.json())
+        .then(data => {
+            const productList = document.getElementById("product-list");
+            productList.innerHTML = "";
+
+            data.docs.forEach(book => {
+                const bookElement = document.createElement("book-card");
+                bookElement.setAttribute("id", book.key);
+                bookElement.setAttribute("cover", `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`);
+                bookElement.setAttribute("title", book.title);
+                bookElement.setAttribute("author", book.author_name ? book.author_name.join(", ") : "Тодорхойгүй");
+                bookElement.setAttribute("year", book.first_publish_year || "Тодорхойгүй");
+                bookElement.setAttribute("isbn", book.isbn ? book.isbn[0] : "Тодорхойгүй");
+                productList.appendChild(bookElement);
+            });
+        })
+        .catch(error => console.error("⚠️ Алдаа:", error));
 });
