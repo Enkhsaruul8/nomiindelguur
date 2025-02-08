@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Онлайн номын худалдаа">
+    <meta name="description" content="Онлайн номын худалдаа - Шилдэг номнуудаа худалдаж аваарай!">
     <meta name="keywords" content="ном, худалдаа, онлайн ном">
     <meta name="author" content="Таны нэр">
-    <title>Номын худалдаа</title>
+    <title>📚 Номын Дэлгүүр</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
         <div class="container">
-            <h1>Номын дэлгүүр</h1>
+            <h1 class="fade-in">📚 Номын Дэлгүүр</h1>
             <button id="darkModeToggle">🌙 Dark Mode</button>
             <nav>
                 <ul>
@@ -24,22 +24,39 @@
             </nav>
         </div>
     </header>
-    
+
     <main>
-        <section class="container">
-            <h2>Шилдэг номнууд</h2>
-            <div id="product-list">
-                <!-- Номын мэдээлэл энд нэмэгдэнэ -->
+        <section id="hero" class="container">
+            <h2 class="fade-in">Шинэ ном, шинэ мэдлэг!</h2>
+            <p>Шилдэг, шинэ, сонирхолтой номнуудыг хямдралтай үнээр аваарай!</p>
+            <a href="products.html" class="button pulse">📖 Ном үзэх</a>
+        </section>
+
+        <section id="bestsellers" class="container">
+            <h2>🔥 Онцлох Номууд</h2>
+            <div class="book-list">
+                <div class="book fade-in">
+                    <img src="https://covers.openlibrary.org/b/id/987654-M.jpg" alt="Ном 1">
+                    <p>Зохиолч: Ж. К. Роулинг</p>
+                </div>
+                <div class="book fade-in">
+                    <img src="https://covers.openlibrary.org/b/id/876543-M.jpg" alt="Ном 2">
+                    <p>Зохиолч: Жорж Оруэлл</p>
+                </div>
+                <div class="book fade-in">
+                    <img src="https://covers.openlibrary.org/b/id/765432-M.jpg" alt="Ном 3">
+                    <p>Зохиолч: Стивен Кинг</p>
+                </div>
             </div>
         </section>
     </main>
-    
+
     <footer>
         <div class="container">
             <p>&copy; 2025 Номын дэлгүүр. Бүх эрх хуулиар хамгаалагдсан.</p>
         </div>
     </footer>
-    
+
     <script src="script.js"></script>
 </body>
 </html>
