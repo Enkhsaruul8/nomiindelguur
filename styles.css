@@ -145,3 +145,55 @@ body.dark-mode #darkModeToggle {
     height: auto;
     border-radius: 5px;
 }
+/* ✅ Бүтээгдэхүүний жагсаалт (3 баганатай Grid Layout) */
+.grid-layout {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Desktop-д 3 багана */
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* ✅ Responsive дизайн */
+@media (max-width: 1024px) {
+    .grid-layout {
+        grid-template-columns: repeat(2, 1fr); /* Tablet-д 2 багана */
+    }
+}
+
+@media (max-width: 768px) {
+    .grid-layout {
+        grid-template-columns: repeat(1, 1fr); /* Mobile-д 1 багана */
+    }
+}
+
+/* ✅ Web Component картын үндсэн стиль */
+book-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+    border: 1px solid #ddd;
+}
+
+/* ✅ Hover эффект */
+book-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* ✅ Dark Mode-д тохируулсан */
+body.dark-mode .grid-layout {
+    background: #222;
+}
+
+body.dark-mode book-card {
+    background: #2c2c2c;
+    color: #fff;
+    border: 1px solid #444;
+}
