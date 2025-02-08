@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("dark-mode", document.body.classList.contains("dark-mode"));
     });
 
-    // ✅ Сагсанд байгаа номыг хадгалах функц
+    // ✅ Сагсны мэдээллийг шинэчлэх функц
     function updateCartUI() {
         const cartItems = document.getElementById("cart-items");
         if (!cartItems) return;
@@ -47,6 +47,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     updateCartUI();
+
+    // ✅ Сагсыг хоослох товчийг ажиллуулах
+    const clearCartBtn = document.getElementById("clear-cart");
+    if (clearCartBtn) {
+        clearCartBtn.addEventListener("click", () => {
+            localStorage.removeItem("cart");
+            updateCartUI();
+        });
+    }
 
     // ✅ Web Component - Номын карт
     class BookCard extends HTMLElement {
@@ -127,16 +136,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
             addToCartBtn.addEventListener("click", () => {
                 let cart = JSON.parse(localStorage.getItem("cart")) || [];
-                cart.push({
-                    id: this.getAttribute("id"),
-                    title: this.getAttribute("title"),
-                    author: this.getAttribute("author"),
-                    year: this.getAttribute("year"),
-                    isbn: this.getAttribute("isbn"),
-                });
+                const bookId = this.getAttribute("id");
 
-                localStorage.setItem("cart", JSON.stringify(cart));
-                updateCartUI();
+                // Сагсанд байгаа эсэхийг шалгах
+                if (!cart.some(item => item.id === bookId)) {
+                    cart.push({
+                        id: bookId,
+                        title: this.getAttribute("title"),
+                        author: this.getAttribute("author"),
+                        year: this.getAttribute("year"),
+                        isbn: this.getAttribute("isbn"),
+                    });
+
+                    localStorage.setItem("cart", JSON.stringify(cart));
+                    updateCartUI();
+                }
 
                 addToCartBtn.textContent = "✅ Сагсанд нэмэгдсэн";
                 addToCartBtn.classList.add("added");
