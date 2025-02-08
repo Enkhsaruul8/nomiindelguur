@@ -35,6 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
             cartItems.appendChild(cartItem);
         });
 
+        // ✅ Сагснаас хасах товч ажиллуулах
         document.querySelectorAll(".remove-from-cart").forEach(button => {
             button.addEventListener("click", (e) => {
                 const itemId = e.target.getAttribute("data-id");
@@ -69,14 +70,14 @@ document.addEventListener("DOMContentLoaded", () => {
                         display: flex;
                         flex-direction: column;
                         align-items: center;
-                        background: var(--card-bg, #ffffff);
+                        background: white;
                         padding: 15px;
                         border-radius: 10px;
                         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
                         text-align: center;
                         max-width: 220px;
                         transition: transform 0.3s ease-in-out;
-                        border: 1px solid var(--border-color, #ddd);
+                        border: 1px solid #ddd;
                     }
 
                     :host(:hover) {
@@ -96,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     p {
                         font-size: 0.9em;
-                        color: var(--subtext-color, #666);
+                        color: #666;
                         margin: 5px 0;
                     }
 
@@ -138,7 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 let cart = JSON.parse(localStorage.getItem("cart")) || [];
                 const bookId = this.getAttribute("id");
 
-                // Сагсанд байгаа эсэхийг шалгах
+                // ✅ Сагсанд байгаа эсэхийг шалгах
                 if (!cart.some(item => item.id === bookId)) {
                     cart.push({
                         id: bookId,
