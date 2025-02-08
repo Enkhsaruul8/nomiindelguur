@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.classList.add("dark-mode");
     }
 
-    darkModeToggle.addEventListener("click", () => {
+    darkModeToggle?.addEventListener("click", () => {
         document.body.classList.toggle("dark-mode");
         localStorage.setItem("dark-mode", document.body.classList.contains("dark-mode"));
     });
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.15);
                         text-align: center;
                         width: 100%;
-                        max-width: 180px;
+                        max-width: 160px;
                         transition: transform 0.3s ease-in-out;
                         border: 1px solid var(--border-color, #ddd);
                     }
@@ -87,17 +87,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         connectedCallback() {
-            this.shadowRoot.getElementById("book-image").src = this.getAttribute("cover");
-            this.shadowRoot.getElementById("book-title").textContent = this.getAttribute("title");
-            this.shadowRoot.getElementById("book-author").textContent = `Зохиолч: ${this.getAttribute("author")}`;
-            this.shadowRoot.getElementById("book-year").textContent = `Нийтлэгдсэн он: ${this.getAttribute("year")}`;
-            this.shadowRoot.getElementById("book-isbn").textContent = `ISBN: ${this.getAttribute("isbn")}`;
-
             const addToCartBtn = this.shadowRoot.getElementById("add-to-cart");
+            const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
             addToCartBtn.addEventListener("click", () => {
-                let cart = JSON.parse(localStorage.getItem("cart")) || [];
-                cart.push({
+                let newCart = JSON.parse(localStorage.getItem("cart")) || [];
+                newCart.push({
                     id: this.getAttribute("id"),
                     title: this.getAttribute("title"),
                     author: this.getAttribute("author"),
@@ -105,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     isbn: this.getAttribute("isbn"),
                 });
 
-                localStorage.setItem("cart", JSON.stringify(cart));
+                localStorage.setItem("cart", JSON.stringify(newCart));
                 addToCartBtn.textContent = "✅ Сагсанд нэмэгдсэн";
                 addToCartBtn.classList.add("added");
             });
