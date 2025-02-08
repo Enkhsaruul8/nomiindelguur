@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("dark-mode", document.body.classList.contains("dark-mode"));
     });
 
-    // 📌 **Web Component - Номын карт (Grid Layout-д тохируулсан)**
+    // ✅ Web Component - Номын карт
     class BookCard extends HTMLElement {
         constructor() {
             super();
@@ -90,29 +90,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
     customElements.define("book-card", BookCard);
 
-    // ✅ Open Library API-с номын мэдээлэл татах
-    if (document.getElementById("product-list")) {
-        fetch("https://openlibrary.org/search.json?q=programming&limit=10")
-            .then((response) => response.json())
-            .then((data) => {
-                const productList = document.getElementById("product-list");
-                productList.innerHTML = "";
+    // ✅ Open Library API-с ном татах
+    fetch("https://openlibrary.org/search.json?q=programming&limit=9")
+        .then(response => response.json())
+        .then(data => {
+            const productList = document.getElementById("product-list");
+            productList.innerHTML = "";
 
-                if (!data.docs || data.docs.length === 0) {
-                    productList.innerHTML = "<p>Одоогоор номын мэдээлэл алга байна.</p>";
-                    return;
-                }
-
-                data.docs.forEach((bookData) => {
-                    const bookElement = document.createElement("book-card");
-                    bookElement.setAttribute("cover", `https://covers.openlibrary.org/b/id/${bookData.cover_i}-M.jpg`);
-                    bookElement.setAttribute("title", bookData.title);
-                    bookElement.setAttribute("author", bookData.author_name ? bookData.author_name.join(", ") : "Тодорхойгүй");
-                    bookElement.setAttribute("year", bookData.first_publish_year || "Тодорхойгүй");
-                    bookElement.setAttribute("isbn", bookData.isbn ? bookData.isbn[0] : "Тодорхойгүй");
-                    productList.appendChild(bookElement);
-                });
-            })
-            .catch((error) => console.error("Error fetching books:", error));
-    }
+            data.docs.forEach(book => {
+                const bookElement = document.createElement("book-card");
+                bookElement.setAttribute("cover", `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`);
+                bookElement.setAttribute("title", book.title);
+                bookElement.setAttribute("author", book.author_name ? book.author_name.join(", ") : "Тодорхойгүй");
+                bookElement.setAttribute("year", book.first_publish_year || "Тодорхойгүй");
+                bookElement.setAttribute("isbn", book.isbn ? book.isbn[0] : "Тодорхойгүй");
+                productList.appendChild(bookElement);
+            });
+        })
+        .catch(error => console.error("⚠️ Алдаа:", error));
 });
