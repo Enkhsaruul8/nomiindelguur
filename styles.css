@@ -1,50 +1,30 @@
-/* ✅ Үндсэн тохиргоо */
-body {
-    font-family: "Arial", sans-serif;
-    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-    color: #333;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-}
-
-/* ✅ Dark Mode */
-body.dark-mode {
-    background: #1e1e1e;
-    color: #f4f4f4;
-}
-
-/* ✅ Толгой хэсэг */
-header {
-    background: rgba(0, 0, 0, 0.8);
-    padding: 20px;
-    color: white;
-    position: relative;
-}
-
 /* ✅ Бүтээгдэхүүний жагсаалт (3 баганатай Grid Layout) */
 .grid-layout {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr); /* Default: 3 багана */
     gap: 20px;
     padding: 20px;
+    justify-content: center;
 }
 
 /* ✅ Responsive дизайн */
 @media (max-width: 1024px) {
     .grid-layout {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr); /* Tablet-д 2 багана */
     }
 }
 
 @media (max-width: 768px) {
     .grid-layout {
-        grid-template-columns: repeat(1, 1fr);
+        grid-template-columns: repeat(1, 1fr); /* Mobile-д 1 багана */
     }
 }
 
-/* ✅ Бүтээгдэхүүний карт */
-.book-card {
+/* ✅ Web Component картын үндсэн стиль */
+book-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     background: white;
     padding: 15px;
     border-radius: 10px;
@@ -55,17 +35,18 @@ header {
     max-width: 250px;
 }
 
-.book-card:hover {
+/* ✅ Hover эффект */
+book-card:hover {
     transform: translateY(-5px);
     box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* ✅ Dark Mode тохируулсан */
+/* ✅ Dark Mode-д тохируулсан */
 body.dark-mode .grid-layout {
     background: #222;
 }
 
-body.dark-mode .book-card {
+body.dark-mode book-card {
     background: #2c2c2c;
     color: #fff;
     border: 1px solid #444;
