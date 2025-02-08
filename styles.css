@@ -98,7 +98,7 @@ book-card:hover {
     box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* ✅ Dark Mode-д тохируулсан */
+/* ✅ Dark Mode тохируулсан */
 body.dark-mode .grid-layout {
     background: #222;
 }
@@ -107,27 +107,4 @@ body.dark-mode book-card {
     background: #2c2c2c;
     color: #fff;
     border: 1px solid #444;
-}
-
-/* ✅ Cart Page */
-#cart-items {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
-}
-
-.cart-item {
-    background: white;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-    width: 90%;
-    max-width: 400px;
-    margin-bottom: 10px;
-}
-
-body.dark-mode .cart-item {
-    background: #2c2c2c;
-    color: #fff;
 }
