@@ -11,14 +11,14 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("dark-mode", document.body.classList.contains("dark-mode"));
     });
 
-    // ✅ Сагсны мэдээллийг шинэчлэх функц
+    // ✅ Сагсны UI шинэчлэх функц
     function updateCartUI() {
         const cartItems = document.getElementById("cart-items");
         if (!cartItems) return;
 
         const cart = JSON.parse(localStorage.getItem("cart")) || [];
-
         cartItems.innerHTML = "";
+
         if (cart.length === 0) {
             cartItems.innerHTML = "<p>🛒 Сагс хоосон байна.</p>";
             return;
@@ -48,6 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     updateCartUI();
 
+    // ✅ Сагсыг хоослох товч
     const clearCartBtn = document.getElementById("clear-cart");
     if (clearCartBtn) {
         clearCartBtn.addEventListener("click", () => {
@@ -56,6 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // ✅ Web Component - Номын карт
     class BookCard extends HTMLElement {
         constructor() {
             super();
