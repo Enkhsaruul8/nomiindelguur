@@ -2,7 +2,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const darkModeToggle = document.getElementById('darkModeToggle');
     darkModeToggle.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
+        localStorage.setItem('dark-mode', document.body.classList.contains('dark-mode'));
     });
+    
+    // Load dark mode preference
+    if (localStorage.getItem('dark-mode') === 'true') {
+        document.body.classList.add('dark-mode');
+    }
 
     // Fetch books from Open Library API
     if (document.getElementById('product-list')) {
@@ -27,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <p>Нийтлэгдсэн он: ${book.first_publish_year || 'Тодорхойгүй'}</p>
                         <p>Хуудасны тоо: ${book.number_of_pages_median || 'Тодорхойгүй'}</p>
                         <p>ISBN: ${book.isbn ? book.isbn[0] : 'Тодорхойгүй'}</p>
-                        <button class="add-to-cart" data-id="${book.key}">Сагсанд нэмэх</button>
+                        <button class="add-to-cart" data-id="${book.key}" data-title="${book.title}">Сагсанд нэмэх</button>
                     `;
                     productList.appendChild(bookItem);
                 });
@@ -36,16 +42,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Fetch cart items and update cart.html
-    if (document.getElementById('cart-items')) {
-        document.body.addEventListener('click', (event) => {
-            if (event.target.classList.contains('add-to-cart')) {
-                const productId = event.target.getAttribute('data-id');
-                const productTitle = event.target.parentElement.querySelector('h3').innerText;
-                const cartItems = document.getElementById('cart-items');
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const updateCartUI = () => {
+        const cartItems = document.getElementById('cart-items');
+        if (cartItems) {
+            cartItems.innerHTML = '';
+            cart.forEach(item => {
                 const cartItem = document.createElement('div');
-                cartItem.innerHTML = `<p>${productTitle} сагсанд нэмэгдлээ!</p>`;
+                cartItem.innerHTML = `<p>${item.title} сагсанд нэмэгдсэн.</p>`;
                 cartItems.appendChild(cartItem);
-            }
-        });
-    }
+            });
+        }
+    };
+    updateCartUI();
+
+    document.body.addEventListener('click', (event) => {
+        if (event.target.classList.contains('add-to-cart')) {
+            const productId = event.target.getAttribute('data-id');
+            const productTitle = event.target.getAttribute('data-title');
+            cart.push({ id: productId, title: productTitle });
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartUI();
+        }
+    });
 });
