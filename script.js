@@ -11,6 +11,43 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("dark-mode", document.body.classList.contains("dark-mode"));
     });
 
+    // ✅ Сагсанд байгаа номыг хадгалах функц
+    function updateCartUI() {
+        const cartItems = document.getElementById("cart-items");
+        if (!cartItems) return;
+
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+        cartItems.innerHTML = "";
+        if (cart.length === 0) {
+            cartItems.innerHTML = "<p>🛒 Сагс хоосон байна.</p>";
+            return;
+        }
+
+        cart.forEach(item => {
+            const cartItem = document.createElement("div");
+            cartItem.classList.add("cart-item");
+            cartItem.innerHTML = `
+                <p><strong>${item.title}</strong></p>
+                <p>Зохиолч: ${item.author}</p>
+                <button class="remove-from-cart" data-id="${item.id}">❌ Хасах</button>
+            `;
+            cartItems.appendChild(cartItem);
+        });
+
+        document.querySelectorAll(".remove-from-cart").forEach(button => {
+            button.addEventListener("click", (e) => {
+                const itemId = e.target.getAttribute("data-id");
+                let cart = JSON.parse(localStorage.getItem("cart")) || [];
+                cart = cart.filter(item => item.id !== itemId);
+                localStorage.setItem("cart", JSON.stringify(cart));
+                updateCartUI();
+            });
+        });
+    }
+
+    updateCartUI();
+
     // ✅ Web Component - Номын карт
     class BookCard extends HTMLElement {
         constructor() {
@@ -24,12 +61,11 @@ document.addEventListener("DOMContentLoaded", () => {
                         flex-direction: column;
                         align-items: center;
                         background: var(--card-bg, #ffffff);
-                        padding: 10px;
-                        border-radius: 8px;
-                        box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.15);
+                        padding: 15px;
+                        border-radius: 10px;
+                        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
                         text-align: center;
-                        width: 100%;
-                        max-width: 160px;
+                        max-width: 220px;
                         transition: transform 0.3s ease-in-out;
                         border: 1px solid var(--border-color, #ddd);
                     }
@@ -45,12 +81,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
 
                     h3 {
-                        font-size: 1em;
+                        font-size: 1.1em;
                         margin: 10px 0;
                     }
 
                     p {
-                        font-size: 0.8em;
+                        font-size: 0.9em;
                         color: var(--subtext-color, #666);
                         margin: 5px 0;
                     }
@@ -59,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         background: #ff7e5f;
                         color: white;
                         border: none;
-                        padding: 8px;
+                        padding: 10px;
                         border-radius: 5px;
                         cursor: pointer;
                         transition: background 0.3s;
@@ -88,11 +124,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         connectedCallback() {
             const addToCartBtn = this.shadowRoot.getElementById("add-to-cart");
-            const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
             addToCartBtn.addEventListener("click", () => {
-                let newCart = JSON.parse(localStorage.getItem("cart")) || [];
-                newCart.push({
+                let cart = JSON.parse(localStorage.getItem("cart")) || [];
+                cart.push({
                     id: this.getAttribute("id"),
                     title: this.getAttribute("title"),
                     author: this.getAttribute("author"),
@@ -100,7 +135,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     isbn: this.getAttribute("isbn"),
                 });
 
-                localStorage.setItem("cart", JSON.stringify(newCart));
+                localStorage.setItem("cart", JSON.stringify(cart));
+                updateCartUI();
+
                 addToCartBtn.textContent = "✅ Сагсанд нэмэгдсэн";
                 addToCartBtn.classList.add("added");
             });
