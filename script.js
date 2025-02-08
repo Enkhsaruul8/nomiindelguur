@@ -4,17 +4,17 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.toggle('dark-mode');
     });
 
-    // Fetch books from JSON
     if (document.getElementById('product-list')) {
         fetch('https://dummyjson.com/products/category/books')
             .then(response => response.json())
             .then(data => {
                 const productList = document.getElementById('product-list');
+                productList.innerHTML = ''; // Clear previous content
                 data.products.forEach(book => {
                     const bookItem = document.createElement('div');
                     bookItem.classList.add('product');
                     bookItem.innerHTML = `
-                        <img src="${book.thumbnail}" alt="${book.title}" style="width:100px; height:100px;">
+                        <img src="${book.thumbnail}" alt="${book.title}" style="width:150px; height:150px;">
                         <h3>${book.title}</h3>
                         <p>${book.description}</p>
                         <p>Зохиолч: ${book.author || 'Тодорхойгүй'}</p>
@@ -28,7 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(error => console.error('Error fetching books:', error));
     }
 
-    // Cart functionality
     document.body.addEventListener('click', (event) => {
         if (event.target.classList.contains('add-to-cart')) {
             const productId = event.target.getAttribute('data-id');
