@@ -1,24 +1,27 @@
 document.addEventListener('DOMContentLoaded', () => {
     const darkModeToggle = document.getElementById('darkModeToggle');
-    darkModeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-        localStorage.setItem('dark-mode', document.body.classList.contains('dark-mode'));
-    });
-    
-    // Load dark mode preference
+
+    // Dark Mode хадгалах, унших
     if (localStorage.getItem('dark-mode') === 'true') {
         document.body.classList.add('dark-mode');
     }
 
-    // Fetch books from Open Library API
+    darkModeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('dark-mode', document.body.classList.contains('dark-mode'));
+    });
+
+    // Open Library API-с ном татах
     if (document.getElementById('product-list')) {
         fetch('https://openlibrary.org/search.json?q=programming&limit=10')
             .then(response => response.json())
             .then(data => {
-                const productList = document.getElementById('product-list');
-                productList.innerHTML = ''; // Clear previous content
+                console.log("Fetched Data:", data); // Өгөгдөл зөв ирж байгаа эсэхийг шалгах
 
-                if (data.docs.length === 0) {
+                const productList = document.getElementById('product-list');
+                productList.innerHTML = '';
+
+                if (!data.docs || data.docs.length === 0) {
                     productList.innerHTML = "<p>Одоогоор номын мэдээлэл алга байна.</p>";
                     return;
                 }
@@ -41,8 +44,14 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(error => console.error('Error fetching books:', error));
     }
 
-    // Fetch cart items and update cart.html
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    // Сагсны өгөгдөл хадгалах
+    let cart = [];
+    try {
+        cart = JSON.parse(localStorage.getItem('cart')) || [];
+    } catch (error) {
+        console.error("Error parsing cart data:", error);
+    }
+
     const updateCartUI = () => {
         const cartItems = document.getElementById('cart-items');
         if (cartItems) {
@@ -54,14 +63,18 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     };
+
     updateCartUI();
 
     document.body.addEventListener('click', (event) => {
         if (event.target.classList.contains('add-to-cart')) {
             const productId = event.target.getAttribute('data-id');
             const productTitle = event.target.getAttribute('data-title');
+            
+            // Сагсанд нэмэх
             cart.push({ id: productId, title: productTitle });
             localStorage.setItem('cart', JSON.stringify(cart));
+
             updateCartUI();
         }
     });
