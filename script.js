@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     if (document.getElementById('product-list')) {
-        fetch('https://dummyjson.com/products/category/books')
+        fetch('https://cdn.dummyjson.com/products/images/groceries/Ice%20Cream/')
             .then(response => response.json())
             .then(data => {
                 const productList = document.getElementById('product-list');
