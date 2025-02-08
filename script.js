@@ -25,6 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         <h3>${book.title}</h3>
                         <p>Зохиолч: ${book.author_name ? book.author_name.join(', ') : 'Тодорхойгүй'}</p>
                         <p>Нийтлэгдсэн он: ${book.first_publish_year || 'Тодорхойгүй'}</p>
+                        <p>Хуудасны тоо: ${book.number_of_pages_median || 'Тодорхойгүй'}</p>
+                        <p>ISBN: ${book.isbn ? book.isbn[0] : 'Тодорхойгүй'}</p>
                         <button class="add-to-cart" data-id="${book.key}">Сагсанд нэмэх</button>
                     `;
                     productList.appendChild(bookItem);
@@ -33,11 +35,17 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(error => console.error('Error fetching books:', error));
     }
 
-    // Cart functionality
-    document.body.addEventListener('click', (event) => {
-        if (event.target.classList.contains('add-to-cart')) {
-            const productId = event.target.getAttribute('data-id');
-            alert(`Ном #${productId} сагсанд нэмэгдлээ!`);
-        }
-    });
+    // Fetch cart items and update cart.html
+    if (document.getElementById('cart-items')) {
+        document.body.addEventListener('click', (event) => {
+            if (event.target.classList.contains('add-to-cart')) {
+                const productId = event.target.getAttribute('data-id');
+                const productTitle = event.target.parentElement.querySelector('h3').innerText;
+                const cartItems = document.getElementById('cart-items');
+                const cartItem = document.createElement('div');
+                cartItem.innerHTML = `<p>${productTitle} сагсанд нэмэгдлээ!</p>`;
+                cartItems.appendChild(cartItem);
+            }
+        });
+    }
 });
