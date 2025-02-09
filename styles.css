@@ -1,4 +1,4 @@
-/* ✅ Үндсэн тохиргоо */
+
 body {
     font-family: "Arial", sans-serif;
     background: linear-gradient(135deg, #ff9a9e, #fad0c4);
@@ -7,14 +7,10 @@ body {
     padding: 0;
     text-align: center;
 }
-
-/* ✅ Dark Mode */
 body.dark-mode {
     background: #1e1e1e;
     color: #f4f4f4;
 }
-
-/* ✅ Толгой хэсэг */
 header {
     background: rgba(0, 0, 0, 0.85);
     padding: 20px;
@@ -43,7 +39,6 @@ nav ul li a:hover {
     color: #feb47b;
 }
 
-/* ✅ Dark Mode Товч */
 #darkModeToggle {
     position: absolute;
     top: 10px;
@@ -65,8 +60,6 @@ body.dark-mode #darkModeToggle {
     background: #fff;
     color: #000;
 }
-
-/* ✅ Онцлох Номууд */
 #bestsellers {
     padding: 40px 20px;
     background: rgba(255, 255, 255, 0.95);
@@ -100,7 +93,6 @@ body.dark-mode #darkModeToggle {
     border-radius: 5px;
 }
 
-/* ✅ Бүтээгдэхүүний жагсаалт (Илүү тэгшхэн Grid Layout) */
 .grid-layout {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -109,7 +101,6 @@ body.dark-mode #darkModeToggle {
     justify-content: center;
 }
 
-/* ✅ Web Component карт (Бүтээгдэхүүн хэсэг) */
 book-card {
     display: flex;
     flex-direction: column;
@@ -130,7 +121,6 @@ book-card:hover {
     box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
 }
 
-/* ✅ Номын зураг */
 book-card img {
     max-width: 100%;
     height: 200px;
@@ -138,7 +128,6 @@ book-card img {
     object-fit: cover;
 }
 
-/* ✅ Номын мэдээлэл */
 book-card h3 {
     font-size: 1.2em;
     margin: 10px 0;
@@ -150,14 +139,12 @@ book-card p {
     margin: 5px 0;
 }
 
-/* ✅ Үнэ */
 book-card .price {
     font-size: 1.1em;
     font-weight: bold;
     color: #e74c3c;
 }
 
-/* ✅ Сагсанд нэмэх товч */
 book-card button {
     background: #ff7e5f;
     color: white;
@@ -175,7 +162,6 @@ book-card button:hover {
     transform: scale(1.05);
 }
 
-/* ✅ Dark Mode тохируулсан */
 body.dark-mode .grid-layout {
     background: #222;
 }
@@ -194,7 +180,6 @@ body.dark-mode book-card .price {
     color: #ffcc00;
 }
 
-/* ✅ Сагсны хуудас */
 #cart-items {
     display: flex;
     flex-direction: column;
@@ -238,7 +223,6 @@ body.dark-mode .cart-item {
     color: #fff;
 }
 
-/* ✅ Холбоо барих хуудас */
 .contact-form {
     max-width: 400px;
     margin: auto;
@@ -271,7 +255,6 @@ body.dark-mode .cart-item {
     background: #feb47b;
 }
 
-/* ✅ Footer */
 footer {
     margin-top: 20px;
     padding: 15px;
@@ -280,7 +263,6 @@ footer {
     font-size: 0.9em;
 }
 
-/* ✅ Responsive дизайн */
 @media (max-width: 1024px) {
     .grid-layout {
         grid-template-columns: repeat(3, 1fr);
