@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     const darkModeToggle = document.getElementById("darkModeToggle");
 
-    // ✅ Dark Mode хадгалах, унших
     if (localStorage.getItem("dark-mode") === "true") {
         document.body.classList.add("dark-mode");
     }
@@ -11,7 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("dark-mode", document.body.classList.contains("dark-mode"));
     });
 
-    // ✅ Сагсны UI шинэчлэх функц
     function updateCartUI() {
         const cartItems = document.getElementById("cart-items");
         if (!cartItems) return;
@@ -49,7 +47,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     updateCartUI();
 
-    // ✅ Сагсыг хоослох товч
     const clearCartBtn = document.getElementById("clear-cart");
     if (clearCartBtn) {
         clearCartBtn.addEventListener("click", () => {
@@ -58,7 +55,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // ✅ Web Component - Номын карт
     class BookCard extends HTMLElement {
         constructor() {
             super();
@@ -179,7 +175,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     customElements.define("book-card", BookCard);
 
-    // ✅ Open Library API-с ном татах
     fetch("https://openlibrary.org/search.json?q=programming&limit=9")
         .then(response => response.json())
         .then(data => {
